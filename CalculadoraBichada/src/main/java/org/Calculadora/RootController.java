@@ -1,99 +1,113 @@
 package org.Calculadora;
 
-
+import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-
-import java.io.IOException;
+import javafx.scene.control.TextField;
 
 public class RootController {
 
     @FXML
-    private VBox buttonBox;
+    private Button ceroButton;
 
     @FXML
-    private VBox calcBox;
+    private Button unoButton;
 
     @FXML
-    private TextField nameText;
+    private Button dosButton;
 
     @FXML
-    private BorderPane root;  // Asegúrate de que este elemento coincida con el root en el archivo FXML
+    private Button tresButton;
 
-    private Calculadora calculadora;
+    @FXML
+    private Button cuatroButton;
+
+    @FXML
+    private Button cincoButton;
+
+    @FXML
+    private Button seisButton;
+
+    @FXML
+    private Button sieteButton;
+
+    @FXML
+    private Button ochoButton;
+
+    @FXML
+    private Button nueveButton;
+
+    @FXML
+    private Button sumarButton;
+
+    @FXML
+    private Button restarButton;
+
+    @FXML
+    private Button multiplicarButton;
+
+    @FXML
+    private Button dividirButton;
+
+    @FXML
+    private Button acButton;
+
+    @FXML
+    private Button clearButton;
+
+    @FXML
+    private Button decimalButton;
+
+    @FXML
+    private Button igualButton;
+
+    @FXML
+    private TextField displayTextField;
+
+    private Calculadora calc;
 
     public RootController() {
-        this.calculadora = new Calculadora();  // Inicializamos la calculadora
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CalculadoraView.fxml"));
-            loader.setController(this);
-            root = loader.load();  // Cargar el FXML y asignar el root
-        } catch (IOException e) {
-            e.printStackTrace();  // Imprimir el error en consola
-            throw new RuntimeException("No se pudo cargar el archivo FXML", e);  // Manejo de excepciones
-        }
+        calc = new Calculadora();
     }
 
-    // Método para manejar los clics de los números
     @FXML
-    private void handleNumberClick(javafx.event.ActionEvent event) {
-        Button clickedButton = (Button) event.getSource();
-        String buttonText = clickedButton.getText();
-        char digit = buttonText.charAt(0);
-        calculadora.insertar(digit);
-        updateDisplay();
+    public void initialize() {
+        displayTextField.textProperty().bind(calc.pantallaProperty());
     }
 
-    // Método para manejar los clics de operadores (+, -, *, /)
     @FXML
-    private void handleOperatorClick(javafx.event.ActionEvent event) {
-        Button clickedButton = (Button) event.getSource();
-        char operator = clickedButton.getText().charAt(0);
-        calculadora.operar(operator);
-        updateDisplay();
+    void handleNumberInput(ActionEvent event) {
+        Button btn = (Button) event.getSource();
+        calc.insertar(btn.getText().charAt(0));
     }
 
-    // Método para manejar el botón de "="
     @FXML
-    private void handleEqualsClick(javafx.event.ActionEvent event) {
-        calculadora.operar(Calculadora.IGUAL);
-        updateDisplay();
+    void handleOperation(ActionEvent event) {
+        Button btn = (Button) event.getSource();
+        char operador = btn.getText().charAt(0);
+        calc.operar(operador);
     }
 
-    // Método para manejar el botón "CE" (borrar todo)
     @FXML
-    private void handleClearEntryClick(javafx.event.ActionEvent event) {
-        calculadora.borrarTodo();
-        updateDisplay();
+    void handleClear(ActionEvent event) {
+        calc.borrar();
     }
 
-    // Método para manejar el botón "C" (borrar calculadora)
     @FXML
-    private void handleClearClick(javafx.event.ActionEvent event) {
-        calculadora.borrar();
-        updateDisplay();
+    void handleClearEntry(ActionEvent event) {
+        calc.borrarTodo();
     }
 
-    // Método para manejar el botón de insertar coma
     @FXML
-    private void handleCommaClick(javafx.event.ActionEvent event) {
-        calculadora.insertarComa();
-        updateDisplay();
+    void handleDecimal(ActionEvent event) {
+        calc.insertarComa();
     }
 
-    // Actualizar el valor mostrado en la pantalla
-    private void updateDisplay() {
-        nameText.setText(calculadora.getPantalla());
-    }
-
-    public BorderPane getRoot() {
-        return root;
+    @FXML
+    void handleEquals(ActionEvent event) {
+        calc.operar(Calculadora.IGUAL);
     }
 }
-
 
 
